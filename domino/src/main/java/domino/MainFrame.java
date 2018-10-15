@@ -19,7 +19,7 @@ public class MainFrame extends Frame {
     private final static int MAX_BONES_COUNT = 2;
     private final static int MAX_BONE_VALUE = 6;
     private ArrayList < Bone > [] playersBones = new ArrayList[PLAYERS_COUNT];
-    private ArrayList < Bone >  bonesAllPlayers = new ArrayList<>();
+    private ArrayList < Bone >  bonesAllPlayers = new ArrayList<Bone>();
     private ArrayList < Bone > bonesOnTheDesk;
     private boolean selected;
     private int selectedIdx;
@@ -184,8 +184,6 @@ public class MainFrame extends Frame {
         isChoosingBone = false;
 
     }
-
-
 
     public void GeneratePermutation() {
 
