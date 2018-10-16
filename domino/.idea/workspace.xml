@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fe04500d-0139-487d-b1c5-4e784ff424b8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/domino/Fish.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/domino/Perms.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domino/Bone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/domino/Bone.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domino/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/domino/MainFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/domino/MainFrame$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/domino/MainFrame$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/domino/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/domino/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -152,7 +146,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/domino/Fish.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1365">
-              <caret line="91" column="3" selection-start-line="91" selection-start-column="3" selection-end-line="91" selection-end-column="3" />
+              <caret line="91" selection-start-line="91" selection-end-line="91" />
             </state>
           </provider>
         </entry>
@@ -294,7 +288,7 @@
     <property name="SearchEverywhereHistoryKey" value="settin&#9;ACTION&#9;Database.Settings&#10;ma&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;maven&#9;ACTION&#9;ActivateMavenProjectsToolWindow&#10;font&#9;PSI&#9;JAVA://java.awt.Font&#10;account&#9;PSI&#9;JAVA://com.sun.javafx.event.EventDispatchChainImpl#activeCount" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1539716762207" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1539717226642" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -370,16 +364,15 @@
       <workItem from="1539513915638" duration="8477000" />
       <workItem from="1539540481872" duration="549000" />
       <workItem from="1539583581630" duration="9213000" />
-      <workItem from="1539697894644" duration="4787000" />
+      <workItem from="1539697894644" duration="5062000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="69623000" />
+    <option name="totallyTimeSpent" value="69898000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16881259" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -543,7 +536,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/domino/Fish.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1365">
-          <caret line="91" column="3" selection-start-line="91" selection-start-column="3" selection-end-line="91" selection-end-column="3" />
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
         </state>
       </provider>
     </entry>
