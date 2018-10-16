@@ -3,6 +3,7 @@ package domino;
         import java.awt.*;
     //  класс, который задает кость как графически, так и логически*/
 public class Bone {
+
     static final byte width = 40;
     static final byte height = width * 2;
     static final byte pointSize = 6;
@@ -22,6 +23,7 @@ public class Bone {
                 { {-1, -1 }, {+1, -1 }, {-1, +1 }, {+1, +1 }, { 0, -1 }, { 0, +1 }
             }
     };
+
     private boolean isMarked;
 
     Bone(byte p1, byte p2) {
