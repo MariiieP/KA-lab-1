@@ -69,7 +69,7 @@ public class Bone {
     /**
      * Получение очков со стороны
      */
-    byte points(int side) {
+    public byte points(int side) {
         if (side == 0) {
             return points1;
         }

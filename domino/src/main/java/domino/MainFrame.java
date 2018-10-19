@@ -183,6 +183,7 @@ public class MainFrame extends Frame {
         }
         Fish fish =new Fish(bonesAllPlayers,playersBones,MAX_BONES_COUNT);
         fish.GeneratePermutation(bonesAllPlayers);
+        bonesAllPlayers.get(1).points(1);
 //        bonesAllPlayers.get(1).points(1)
         isChoosingBone = false;
 
