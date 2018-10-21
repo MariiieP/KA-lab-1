@@ -9,12 +9,16 @@ public class Perms {
     private int n;
     private int k;
 
-    public Perms(int[] s) { //конструктор
-        n = s.length;
-        ArrPerms = new int[fact(n)][n];
-        p = Arrays.copyOf(s, n);
+    public Perms(int s) { //конструктор
+
+        n=s;
+        int[] arr1 = new int[s];
+        for (int i=0;i<s; i++)
+            arr1[i]=i;
+        ArrPerms = new int[fact(s)][s];
+        p = Arrays.copyOf(arr1, s);
         k = 0;
-        fiilPerms(n - 1);
+        fiilPerms(s-1);
     }
 
     public void fiilPerms(int m) {

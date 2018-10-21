@@ -16,7 +16,7 @@ public class MainFrame extends Frame {
     private Graphics graphics;
     private Color backgroundColor;
     private final static int PLAYERS_COUNT = 2;
-    private final static int MAX_BONES_COUNT = 10;
+    private final static int MAX_BONES_COUNT = 2;
     private final static int MAX_BONE_VALUE = 6;
     private ArrayList < Bone > [] playersBones = new ArrayList[PLAYERS_COUNT];
     private ArrayList < Bone >  bonesAllPlayers = new ArrayList<Bone>();
@@ -37,6 +37,7 @@ public class MainFrame extends Frame {
         initComponents();
         graphics = this.getGraphics();
         backgroundColor = getBackground();
+
     }
 
     private void initComponents() {
@@ -67,6 +68,10 @@ public class MainFrame extends Frame {
             public void windowOpened(WindowEvent evt) {
                 formWindowOpened(evt);
             }
+            public void windowClosing(WindowEvent evt) {
+                exitForm(evt);
+            }
+
         });
 
         addComponentListener(new ComponentAdapter() {
@@ -80,13 +85,21 @@ public class MainFrame extends Frame {
             public void actionPerformed(ActionEvent evt) {
                 startButtonListener(evt);
             }
+
         });
+
+
 
         buttonStop.setLabel("Считать");
         buttonStop.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-               JOptionPane.showMessageDialog(frame, "Число рыб: "+countFish,    "Ответ", JOptionPane.QUESTION_MESSAGE);
+//                bonesAllPlayers.clear();
 
+                Fish fish =new Fish(bonesAllPlayers,playersBones,MAX_BONES_COUNT);
+                if (fish.GeneratePermutation(bonesAllPlayers))
+                    JOptionPane.showMessageDialog(frame, "Рыба найдена",    "Ответ", JOptionPane.QUESTION_MESSAGE);
+                 else
+                    JOptionPane.showMessageDialog(frame, "Рыбы нет",    "Ответ", JOptionPane.QUESTION_MESSAGE);
             }
         });
 
@@ -115,7 +128,9 @@ public class MainFrame extends Frame {
     private void formComponentShown(ComponentEvent evt) {}
 
 
-
+    private void exitForm(WindowEvent evt) {
+        System.exit(0);
+    }
 
     // инициализация костей и раздача их игрокам
     private void initBones() {
@@ -140,6 +155,8 @@ public class MainFrame extends Frame {
                 bonesPool.remove(k);
             }
         }
+
+        bonesAllPlayers.clear();
         //заполнение массива 2n
         for (int p = 0; p < PLAYERS_COUNT; p++) {
             for (int i = 0; i < MAX_BONES_COUNT; i++) {
@@ -181,10 +198,8 @@ public class MainFrame extends Frame {
                 bone.moveTo(x + i * dx, y + i * dy, graphics, backgroundColor);
             }
         }
-        Fish fish =new Fish(bonesAllPlayers,playersBones,MAX_BONES_COUNT);
-        fish.GeneratePermutation(bonesAllPlayers);
-        bonesAllPlayers.get(1).points(1);
-//        bonesAllPlayers.get(1).points(1)
+
+
         isChoosingBone = false;
 
     }
