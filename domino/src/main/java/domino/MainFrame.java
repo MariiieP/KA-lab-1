@@ -1,16 +1,12 @@
 
 package domino;
 
-        import com.sun.tools.javac.util.ArrayUtils;
 
         import javax.swing.*;
         import java.awt.*;
         import java.awt.event.*;
         import java.util.ArrayList;
         import java.lang.*;
-
-        import java.util.Timer;
-        import java.util.TimerTask;
 
 public class MainFrame extends Frame {
     private Graphics graphics;
@@ -154,13 +150,10 @@ public class MainFrame extends Frame {
                 bonesPool.remove(k);
             }
         }
-
 //        playersBones[0].add(bonesPool.get(24));
 //        playersBones[0].add(bonesPool.get(27));
 //        playersBones[1].add(bonesPool.get(22));
 //        playersBones[1].add(bonesPool.get(2));
-
-
         bonesAllPlayers.clear();
         //заполнение массива 2n
         for (int p = 0; p < PLAYERS_COUNT; p++) {
@@ -222,7 +215,6 @@ private MainFrame frame;
                 frame.setBounds(dimension.width/2 - 700, dimension.height/2 - 400, 1400,800);
                 JFrame.setDefaultLookAndFeelDecorated(true);
                 frame.setVisible(true);
-//                frame.dispose();
             }
         });
     }
