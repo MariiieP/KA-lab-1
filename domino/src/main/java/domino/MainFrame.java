@@ -93,7 +93,6 @@ public class MainFrame extends Frame {
         buttonStop.setLabel("Считать");
         buttonStop.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-//                bonesAllPlayers.clear();
 
                 Fish fish =new Fish(bonesAllPlayers,playersBones,MAX_BONES_COUNT);
                 if (fish.GeneratePermutation(bonesAllPlayers))
@@ -155,6 +154,12 @@ public class MainFrame extends Frame {
                 bonesPool.remove(k);
             }
         }
+
+//        playersBones[0].add(bonesPool.get(24));
+//        playersBones[0].add(bonesPool.get(27));
+//        playersBones[1].add(bonesPool.get(22));
+//        playersBones[1].add(bonesPool.get(2));
+
 
         bonesAllPlayers.clear();
         //заполнение массива 2n
