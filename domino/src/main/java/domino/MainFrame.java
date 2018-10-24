@@ -150,10 +150,10 @@ public class MainFrame extends Frame {
                 bonesPool.remove(k);
             }
         }
-//        playersBones[0].add(bonesPool.get(6));
-//        playersBones[0].add(bonesPool.get(27));
-//        playersBones[1].add(bonesPool.get(21));
-//        playersBones[1].add(bonesPool.get(8));
+//        playersBones[0].add(bonesPool.get(21));
+//        playersBones[0].add(bonesPool.get(1));
+//        playersBones[1].add(bonesPool.get(7));
+//        playersBones[1].add(bonesPool.get(18));
         bonesAllPlayers.clear();
         //заполнение массива 2n
         for (int p = 0; p < PLAYERS_COUNT; p++) {

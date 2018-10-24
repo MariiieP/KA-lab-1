@@ -50,54 +50,42 @@ public class Fish {
         return false;
     }
 
-    public boolean isWhose(int index) {
+    private boolean isWhose(int index) {
         return ((index >= 0) && (index <= (MAX_BONES_COUNT - 1))) == true ? true : false;
     }
 
-    public boolean tryPerms(int first, int last, int index1, int index2 , int[] arr, boolean[] tryLayOut) {
+    private boolean Help(int first, int last, int index) {
+        return (first == bonesAllPlayers.get(index).points(0) || first == bonesAllPlayers.get(index).points(1) ||
+                last == bonesAllPlayers.get(index).points(0) || last == bonesAllPlayers.get(index).points(1));
+    }
+
+    private boolean tryJoin(int first, int last, int index, int[] arr, boolean[] tryLayOut) {
+        for (int i = index; i <= bonesAllPlayers.size() - 1; i++)
+            if (tryJoinNeighbor(first, last, arr[i], tryLayOut))
+                return true;
+        return false;
+    }
+
+    private boolean tryJoinNeighbor(int first, int last, int index, boolean[] tryLayOut) {
+        return (tryLayOut[index] == false && Help(first, last, index));
+    }
+
+    private boolean tryPerms(int first, int last, int index1, int index2, int[] arr, boolean[] tryLayOut) {
         if ((isWhose(index1) && isWhose(index2)) == true) {
-            for (int i = 0; i < MAX_BONES_COUNT; i++) {
-                Bone bonePlayers = playersBones[1].get(i);
-                if (( tryLayOut[arr[i]] == false && first == bonePlayers.points(0))
-                        || ( tryLayOut[arr[i]] == false &&  first == bonePlayers.points(1)) ||
-                        (tryLayOut[arr[i]] == false &&  last == bonePlayers.points(0)) ||
-                        (tryLayOut[arr[i]] == false &&  last == bonePlayers.points(1)))
+            for (int i = MAX_BONES_COUNT; i < bonesAllPlayers.size(); i++) {
+                if (tryLayOut[arr[i]] == false && Help(first, last, i))
                     return false;
             }
         } else if ((isWhose(index1) == false) && (isWhose(index2) == false)) {
             for (int i = 0; i < MAX_BONES_COUNT; i++) {
-                Bone bonePlayers = playersBones[0].get(i);
-                if ((tryLayOut[arr[i]] == false && first == bonePlayers.points(0)) ||
-                        (tryLayOut[arr[i]] == false && first == bonePlayers.points(1)) ||
-                        (tryLayOut[arr[i]] == false && last == bonePlayers.points(0)) ||
-                        (tryLayOut[arr[i]] == false && last == bonePlayers.points(1)))
+                if (tryLayOut[arr[i]] == false && Help(first, last, i))
                     return false;
             }
         }
         return true;
     }
 
-    public boolean tryJoin(int first, int last, int index, int[] arr, boolean[] tryLayOut) {
-        for (int i = index; i <= bonesAllPlayers.size()-1; i++)
-            if ( (tryLayOut[arr[i ]] == false && first == bonesAllPlayers.get(arr[i ]).points(0)) ||
-                    (first == bonesAllPlayers.get(arr[i ]).points(1) && tryLayOut[arr[i]] == false) ||
-                    ( tryLayOut[arr[i ]] == false && last == bonesAllPlayers.get(arr[i]).points(0)) ||
-                    ( tryLayOut[arr[i ]] == false && last == bonesAllPlayers.get(arr[i]).points(1)))
-                return true;
-        return false;
-    }
-
-    public boolean tryJoinTwo(int first, int last, int index, int[] arr, boolean[] tryLayOut) {
-//        for (int i = index; i <= bonesAllPlayers.size()-1; i++)
-        if ( (tryLayOut[arr[index]] == false && first == bonesAllPlayers.get(arr[index]).points(0)) ||
-                (first == bonesAllPlayers.get(arr[index]).points(1) && tryLayOut[arr[index]] == false) ||
-                ( tryLayOut[arr[index]] == false && last == bonesAllPlayers.get(arr[index]).points(0)) ||
-                ( tryLayOut[arr[index]] == false && last == bonesAllPlayers.get(arr[index]).points(1)))
-            return true;
-        return false;
-    }
-
-    public boolean testFish(int[] arr) {
+    private boolean testFish(int[] arr) {
 
         int size = arr.length;
         boolean[] tryLayOut = new boolean[size];
@@ -110,7 +98,8 @@ public class Fish {
 //            boolean[] tryLayOut = new boolean[size];
             Arrays.fill(tryLayOut,false);
             tryLayOut[arr[0]] = true;
-            int countUseBonePlayers1=0; int countUseBonePlayers2=0;
+            int countUseBonePlayers1=0;
+            int countUseBonePlayers2=0;
             if (isWhose(arr[0]) == true)
                 countUseBonePlayers1++;
             else
@@ -135,7 +124,8 @@ public class Fish {
                                 break;
                             }
                             if (tryJoin(first, last, i + 1, arr,tryLayOut))
-                                if (tryJoinTwo(first, last, i + 1, arr,tryLayOut))
+                               if (tryJoinNeighbor(first,last,arr[i+1],tryLayOut))
+//                                if (tryJoinTwo(first, last, i + 1, arr,tryLayOut))
                                     i = arr.length;
                                 else
                                     return false;
@@ -157,7 +147,7 @@ public class Fish {
                                 break;
                             }
                             if (tryJoin(first, last, i + 1, arr,tryLayOut))
-                                if (tryJoinTwo(first, last, i + 1, arr,tryLayOut))
+                                if (tryJoinNeighbor(first,last,arr[i+1],tryLayOut))
                                     i = arr.length;
                                 else
                                     return false;
@@ -179,7 +169,7 @@ public class Fish {
                                 break;
                             }
                             if (tryJoin(first, last, i + 1, arr,tryLayOut))
-                                if (tryJoinTwo(first, last, i + 1, arr,tryLayOut))
+                                if (tryJoinNeighbor(first,last,arr[i+1],tryLayOut))
                                     i = arr.length;
                                 else
                                     return false;
@@ -201,7 +191,7 @@ public class Fish {
                                 break;
                             }
                             if (tryJoin(first, last, i + 1, arr,tryLayOut))
-                                if (tryJoinTwo(first, last, i + 1, arr,tryLayOut))
+                                if (tryJoinNeighbor(first,last,arr[i+1],tryLayOut))
                                     i = arr.length;
                                 else
                                     return false;
