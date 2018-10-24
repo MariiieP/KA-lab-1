@@ -89,9 +89,15 @@ public class MainFrame extends Frame {
         buttonStop.setLabel("Считать");
         buttonStop.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-
-                Fish fish =new Fish(bonesAllPlayers,playersBones,MAX_BONES_COUNT);
+                int max = bonesAllPlayers.size();
+                boolean[] tryLayOut = new boolean[max];
+                int[] arrSPovtor = new int[max];
+                int[] PermsNotP = new int[max];
+                Fish fish =new Fish(bonesAllPlayers,playersBones,MAX_BONES_COUNT,tryLayOut,arrSPovtor,PermsNotP);
                 if (fish.GeneratePermutation(bonesAllPlayers))
+//                    searchButtonListener(evt);
+
+
                     JOptionPane.showMessageDialog(frame, "Рыба найдена",    "Ответ", JOptionPane.QUESTION_MESSAGE);
                  else
                     JOptionPane.showMessageDialog(frame, "Рыбы нет",    "Ответ", JOptionPane.QUESTION_MESSAGE);
@@ -150,10 +156,10 @@ public class MainFrame extends Frame {
                 bonesPool.remove(k);
             }
         }
-//        playersBones[0].add(bonesPool.get(21));
-//        playersBones[0].add(bonesPool.get(1));
-//        playersBones[1].add(bonesPool.get(7));
-//        playersBones[1].add(bonesPool.get(18));
+//        playersBones[0].add(bonesPool.get(22));
+//        playersBones[0].add(bonesPool.get(8));
+//        playersBones[1].add(bonesPool.get(21));
+//        playersBones[1].add(bonesPool.get(11));
         bonesAllPlayers.clear();
         //заполнение массива 2n
         for (int p = 0; p < PLAYERS_COUNT; p++) {
@@ -202,7 +208,9 @@ public class MainFrame extends Frame {
 
     }
 
+    private void searchButtonListener(ActionEvent evt){
 
+    }
 
 private MainFrame frame;
 

@@ -12,20 +12,30 @@ public class Fish {
     private int MAX_BONES_COUNT;
     private ArrayList<Bone> bonesAllPlayers;
     private ArrayList<Bone>[] playersBones;
+    boolean[] tryLayOut;
+    int[] arrSPovtor;
+   int[] PermsP;
 
 
-    public Fish(ArrayList<Bone> bonesAll, ArrayList<Bone>[] pBones, int N) {
+    public Fish(ArrayList<Bone> bonesAll, ArrayList<Bone>[] pBones, int N,boolean[] trueF,int[] arrP, int[] PermNotPov) {
         bonesAllPlayers = bonesAll;
         playersBones = pBones;
         MAX_BONES_COUNT = N;
+        tryLayOut = trueF;
+        arrSPovtor = arrP;
+        PermsP = PermNotPov;
     }
 
     public boolean GeneratePermutation(ArrayList bonesAllPlayers) {
         int max = bonesAllPlayers.size();
+//        boolean[] tryLayOut = new boolean[max];
+//        int[] arrSPovtor = new int[max];
         Perms perms = new Perms(max);
         for (int i = 0; i < fact(max); i++) {
             first = true;
-            if (testFish(perms.ArrPerms[i]))
+            PermsP = perms.ArrPerms[i];
+            int[]  testarray = {1,3,0,2};
+            if (testFish(PermsP,tryLayOut,arrSPovtor))
                 return true;
         }
 //            first = true;
@@ -85,17 +95,19 @@ public class Fish {
         return true;
     }
 
-    private boolean testFish(int[] arr) {
+
+
+    private boolean testFish(int[] arr, boolean[] tryLayOut,int[] arrSPovtor) {
 
         int size = arr.length;
-        boolean[] tryLayOut = new boolean[size];
-        int[] arrSPovtor = new int[size];
+//        boolean[] tryLayOut = new boolean[size];
+//        int[] arrSPovtor = new int[size];
+        Arrays.fill(arrSPovtor,0);
 
         while (nextPermWithRepetition(arrSPovtor, 3))
         {
             int first = bonesAllPlayers.get(arr[0]).points(1);
             int last = bonesAllPlayers.get(arr[0]).points(0);
-//            boolean[] tryLayOut = new boolean[size];
             Arrays.fill(tryLayOut,false);
             tryLayOut[arr[0]] = true;
             int countUseBonePlayers1=0;
@@ -125,15 +137,11 @@ public class Fish {
                             }
                             if (tryJoin(first, last, i + 1, arr,tryLayOut))
                                if (tryJoinNeighbor(first,last,arr[i+1],tryLayOut))
-//                                if (tryJoinTwo(first, last, i + 1, arr,tryLayOut))
                                     i = arr.length;
                                 else
                                     return false;
                             else
-                                if ( countUseBonePlayers1==MAX_BONES_COUNT || countUseBonePlayers2==MAX_BONES_COUNT)
-                                    return false;
-                                else
-                                    return true;
+                                return !( countUseBonePlayers1==MAX_BONES_COUNT || countUseBonePlayers2==MAX_BONES_COUNT);
                             break;
                         case 1:
                             if (first == bonesAllPlayers.get(arr[i + 1]).points(1)) {
@@ -152,10 +160,7 @@ public class Fish {
                                 else
                                     return false;
                             else
-                                if ( countUseBonePlayers1==MAX_BONES_COUNT || countUseBonePlayers2==MAX_BONES_COUNT)
-                                    return false;
-                                else
-                                    return true;
+                                return !( countUseBonePlayers1==MAX_BONES_COUNT || countUseBonePlayers2==MAX_BONES_COUNT);
                             break;
                         case 2:
                             if (last == bonesAllPlayers.get(arr[i + 1]).points(0)) {
@@ -174,10 +179,7 @@ public class Fish {
                                 else
                                     return false;
                             else
-                                if ( countUseBonePlayers1==MAX_BONES_COUNT || countUseBonePlayers2==MAX_BONES_COUNT)
-                                    return false;
-                                else
-                                    return true;
+                                return !( countUseBonePlayers1==MAX_BONES_COUNT || countUseBonePlayers2==MAX_BONES_COUNT);
                             break;
                         case 3:
                             if (last == bonesAllPlayers.get(arr[i + 1]).points(1)) {
@@ -196,10 +198,7 @@ public class Fish {
                                 else
                                     return false;
                             else
-                                if ( countUseBonePlayers1==MAX_BONES_COUNT || countUseBonePlayers2==MAX_BONES_COUNT)
-                                    return false;
-                                else
-                                    return true;
+                                return !( countUseBonePlayers1==MAX_BONES_COUNT || countUseBonePlayers2==MAX_BONES_COUNT);
                             break;
                     }
             }
