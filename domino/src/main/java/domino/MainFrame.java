@@ -2,32 +2,27 @@
 package domino;
 
 
-        import javax.swing.*;
-        import java.awt.*;
-        import java.awt.event.*;
-        import java.util.ArrayList;
-        import java.lang.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.lang.*;
 
 public class MainFrame extends Frame {
     private Graphics graphics;
     private Color backgroundColor;
     private final static int PLAYERS_COUNT = 2;
-    private final static int MAX_BONES_COUNT = 2;
+    private int MAX_BONES_COUNT = 7;
     private final static int MAX_BONE_VALUE = 6;
-    private ArrayList < Bone > [] playersBones = new ArrayList[PLAYERS_COUNT];
-    private ArrayList < Bone >  bonesAllPlayers = new ArrayList<Bone>();
-    private ArrayList < Bone > bonesOnTheDesk;
+    private ArrayList<Bone>[] playersBones = new ArrayList[PLAYERS_COUNT];
+    private ArrayList<Bone> bonesAllPlayers = new ArrayList<Bone>();
+    private ArrayList<Bone> bonesOnTheDesk;
+    private int[] placeJ = new int[2];
+    private int[] placeK = new int[2];
+
     private boolean selected;
-    private int selectedIdx;
-    private boolean gameStarted;
-    private boolean isHandling;
-    private boolean isChoosingBone;
-    private int selectedOnBoard;
-    private int countFish=0;
+    private int countFish = 0;
     private JTextArea textArea;
-
-
-
 
     public MainFrame() {
         initComponents();
@@ -41,6 +36,8 @@ public class MainFrame extends Frame {
         add(buttonStart);
         Button buttonStop = new Button();
         add(buttonStop);
+        JTextField field1 = new JTextField("7");
+        add(field1);
 
         ActionListener newListener = new ActionListener() {
             @Override
@@ -54,7 +51,6 @@ public class MainFrame extends Frame {
         setLocationRelativeTo(null);
         setResizable(false);
         selected = false;
-        isHandling = false;
 
         addWindowListener(new WindowAdapter() {
             public void windowActivated(WindowEvent evt) {
@@ -64,6 +60,7 @@ public class MainFrame extends Frame {
             public void windowOpened(WindowEvent evt) {
                 formWindowOpened(evt);
             }
+
             public void windowClosing(WindowEvent evt) {
                 exitForm(evt);
             }
@@ -79,11 +76,17 @@ public class MainFrame extends Frame {
         buttonStart.setLabel("Начать");
         buttonStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                startButtonListener(evt);
+                String str = field1.getText();
+                str.trim();
+                str.replaceAll("^\\s+|\\s+$", "");
+                int res = Integer.parseInt(str);
+                if (res > 0 && res < 15) {
+                    MAX_BONES_COUNT = res;
+                    startButtonListener(evt);
+                } else
+                    JOptionPane.showMessageDialog(frame, "Введено неверное значение", "Ответ", JOptionPane.QUESTION_MESSAGE);
             }
-
         });
-
 
 
         buttonStop.setLabel("Считать");
@@ -93,18 +96,13 @@ public class MainFrame extends Frame {
                 boolean[] tryLayOut = new boolean[max];
                 int[] arrSPovtor = new int[max];
                 int[] PermsNotP = new int[max];
-                Fish fish =new Fish(bonesAllPlayers,playersBones,MAX_BONES_COUNT,tryLayOut,arrSPovtor,PermsNotP);
-                if (fish.GeneratePermutation(bonesAllPlayers))
-//                    searchButtonListener(evt);
-
-
-                    JOptionPane.showMessageDialog(frame, "Рыба найдена",    "Ответ", JOptionPane.QUESTION_MESSAGE);
-                 else
-                    JOptionPane.showMessageDialog(frame, "Рыбы нет",    "Ответ", JOptionPane.QUESTION_MESSAGE);
+                Fish fish = new Fish(bonesAllPlayers, playersBones, MAX_BONES_COUNT, tryLayOut, arrSPovtor, PermsNotP);
+                if (fish.generatePermutation(bonesAllPlayers))
+                    searchButtonListener(evt, fish);
+                else
+                    JOptionPane.showMessageDialog(frame, "Рыбы нет", "Ответ", JOptionPane.QUESTION_MESSAGE);
             }
         });
-
-
 
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
@@ -114,19 +112,27 @@ public class MainFrame extends Frame {
                         .addComponent(buttonStart, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonStop, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(field1, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(1400, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(buttonStop, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(buttonStart, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(buttonStart, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(field1, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(1400, Short.MAX_VALUE))
         );
         pack();
     }
-    private void formWindowOpened(WindowEvent evt) {}
-    private void formWindowActivated(WindowEvent evt) {}
-    private void formComponentShown(ComponentEvent evt) {}
+
+    private void formWindowOpened(WindowEvent evt) {
+    }
+
+    private void formWindowActivated(WindowEvent evt) {
+    }
+
+    private void formComponentShown(ComponentEvent evt) {
+    }
 
 
     private void exitForm(WindowEvent evt) {
@@ -135,7 +141,7 @@ public class MainFrame extends Frame {
 
     // инициализация костей и раздача их игрокам
     private void initBones() {
-        ArrayList < Bone > bonesPool = new ArrayList < Bone > ();
+        ArrayList<Bone> bonesPool = new ArrayList<Bone>();
         bonesPool.clear();
         //инициализируем все кости 0..27 (28)
         for (byte p = 0; p <= MAX_BONE_VALUE; p++) {
@@ -143,23 +149,18 @@ public class MainFrame extends Frame {
                 bonesPool.add(new Bone(p, q));
             }
         }
-
         for (int i = 0; i < PLAYERS_COUNT; i++) {
-            playersBones[i] = new ArrayList < Bone > ();
+            playersBones[i] = new ArrayList<Bone>();
         }
         //заполнение массивов игроков
-        bonesOnTheDesk = new ArrayList < Bone > ();
+        bonesOnTheDesk = new ArrayList<Bone>();
         for (int i = 0; i < MAX_BONES_COUNT; i++) {
             for (int p = 0; p < PLAYERS_COUNT; p++) {
-                int k = (int)(Math.random() * bonesPool.size());
+                int k = (int) (Math.random() * bonesPool.size());
                 playersBones[p].add(bonesPool.get(k));
                 bonesPool.remove(k);
             }
         }
-//        playersBones[0].add(bonesPool.get(22));
-//        playersBones[0].add(bonesPool.get(8));
-//        playersBones[1].add(bonesPool.get(21));
-//        playersBones[1].add(bonesPool.get(11));
         bonesAllPlayers.clear();
         //заполнение массива 2n
         for (int p = 0; p < PLAYERS_COUNT; p++) {
@@ -167,9 +168,7 @@ public class MainFrame extends Frame {
                 bonesAllPlayers.add(playersBones[p].get(i));
             }
         }
-
-       }
-
+    }
 
 
     // то что мы делаем при старте
@@ -185,46 +184,85 @@ public class MainFrame extends Frame {
                 int dx = 0, dy = 0;
                 switch (p) {
                     case 0:
-                        x = this.getWidth() / 2 - Bone.width * MAX_BONES_COUNT+10;
+                        x = this.getWidth() / 2 - Bone.width * MAX_BONES_COUNT + 10;
                         y = this.getHeight() - Bone.width;
                         dx = (Bone.height + 10);
                         dy = 0;
                         bone.rotate((byte) 1, (byte) 0, graphics, backgroundColor);
                         break;
                     case 1:
-                        x = this.getWidth() / 2 - Bone.width * MAX_BONES_COUNT+10;
+                        x = this.getWidth() / 2 - Bone.width * MAX_BONES_COUNT + 10;
                         y = 50 + Bone.width;
                         dx = (Bone.height + 10);
                         dy = 0;
-                        bone.rotate((byte) - 1, (byte) 0, graphics, backgroundColor);
+                        bone.rotate((byte) 1, (byte) 0, graphics, backgroundColor);
                         break;
                 }
                 bone.moveTo(x + i * dx, y + i * dy, graphics, backgroundColor);
             }
         }
-
-
-        isChoosingBone = false;
-
     }
 
-    private void searchButtonListener(ActionEvent evt){
+    private void searchButtonListener(ActionEvent evt, Fish fish) {
+        int size = fish.tryLayOut.length;
+        int maxBoneTrue = 0;
+        for (int i = 0; i <= size - 1; i++)
+            if (fish.tryLayOut[i] == true)
+                maxBoneTrue++;
+        int x = 0, y = 0;
+        Bone bone1 = bonesAllPlayers.get(fish.PermsP[0]);
+        x = this.getWidth() / 2;
+        y = this.getHeight() / 2;
+        bone1.moveTo(x, y, graphics, backgroundColor);
+        placeJ[0] = bone1.getX() - bone1.getSizeX();
+        ;
+        placeJ[1] = bone1.getX() + bone1.getSizeX();
+        placeK[0] = bone1.getY();
+        placeK[1] = bone1.getY();
 
+        for (int i = 1; i < maxBoneTrue; i++) {
+            Bone bone = bonesAllPlayers.get(fish.PermsP[i]);
+            switch (fish.arrSPovtor[i - 1]) {
+                case 0:
+                    x = placeJ[1];
+                    bone.moveTo(x, y, graphics, backgroundColor);
+                    placeJ[1] = bone.getX() + bone.getSizeX();
+                    break;
+                case 1:
+                    x = placeJ[1];
+                    bone.rotate((byte) -1, (byte) 0, graphics, backgroundColor);
+                    bone.moveTo(x, y, graphics, backgroundColor);
+                    placeJ[1] = bone.getX() + bone.getSizeX();
+                    break;
+                case 2:
+                    x = placeJ[0];
+                    bone.rotate((byte) -1, (byte) 0, graphics, backgroundColor);
+                    bone.moveTo(x, y, graphics, backgroundColor);
+                    placeJ[0] = bone.getX() - bone.getSizeX();
+                    break;
+                case 3:
+                    x = placeJ[0];
+                    bone.moveTo(x, y, graphics, backgroundColor);
+                    placeJ[0] = bone.getX() - bone.getSizeX();
+                    break;
+            }
+        }
     }
 
-private MainFrame frame;
+    private MainFrame frame;
 
     public static void main(String args[]) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 MainFrame frame = new MainFrame();
                 Toolkit toolKit = Toolkit.getDefaultToolkit();
-                Dimension dimension =  toolKit.getScreenSize();
-                frame.setBounds(dimension.width/2 - 700, dimension.height/2 - 400, 1400,800);
+                Dimension dimension = toolKit.getScreenSize();
+                frame.setBounds(dimension.width / 2 - 700, dimension.height / 2 - 400, 1400, 800);
                 JFrame.setDefaultLookAndFeelDecorated(true);
                 frame.setVisible(true);
             }
         });
     }
-
 }
+
+

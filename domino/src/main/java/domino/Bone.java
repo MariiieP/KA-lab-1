@@ -92,12 +92,8 @@ public class Bone {
         int sx = getSizeX(), sy = getSizeY();
         G.setColor(colorBack);
         G.fillRect(X - sx / 2, Y - sy / 2, sx, sy);
-        if (isMarked) {
-            G.setColor(colorMarked);
-        } else {
-            G.setColor(colorPoint);
-        }
-        G.drawRect(X - sx / 2, Y - sy / 2, sx - 1, sy - 1);
+        G.setColor(colorPoint);
+        G.drawRect(X - sx / 2, Y - sy / 2, sx+1 , sy+1 );
         G.setColor(colorPoint);
         if (dirX != 0) {
             G.drawLine(X, Y - sy / 2 + 10, X, Y + sy / 2 - 10);
@@ -109,7 +105,6 @@ public class Bone {
             int p = points1;
             if (s == 2) p = points2;
             for (int i = 0; i < p; i++) {
-                //int d=width*i/(p+1)-pointSize/2;
                 int dx = pointCoords[p][i][0] * width / 4;
                 int dy = pointCoords[p][i][1] * width / 4;
                 G.fillOval(x1 + dx - pointSize / 2, y1 + dy - pointSize / 2,
@@ -125,7 +120,7 @@ public class Bone {
     void hide(Graphics G, Color back) {
         G.setColor(back);
         int sx = getSizeX(), sy = getSizeY();
-        G.fillRect(X - sx / 2, Y - sy / 2, sx, sy);
+        G.fillRect(X - sx / 2-2, Y - sy / 2-2, sx+2, sy+2);
     }
     /**
      * Перемещение кости на доске
