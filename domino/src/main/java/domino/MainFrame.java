@@ -1,8 +1,6 @@
 package domino;
 
 import javax.swing.JTextArea;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.JOptionPane;
 import javax.swing.GroupLayout;
 import javax.swing.LayoutStyle;
@@ -26,6 +24,7 @@ import java.awt.Dimension;
 import java.awt.TextField;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +35,6 @@ public class MainFrame extends Frame {
     private int MAX_BONES_COUNT = 7;
     private final static int MAX_BONE_VALUE = 6;
     private List<Bone>[] playersBones = new List[PLAYERS_COUNT];
-//    private ArrayList<Bone> bonesAllPlayers = new ArrayList<Bone>();
     private List<Bone> bonesAllPlayers = new ArrayList<Bone>();
     private List<Bone> bonesOnTheDesk;
     private int[] placeJ = new int[2];
@@ -52,6 +50,10 @@ public class MainFrame extends Frame {
         initComponents();
         graphics = this.getGraphics();
         backgroundColor = getBackground();
+    }
+
+    private List<Bone.BoneModel> toModels(List<Bone> list) {
+        return list.stream().map(bone ->  bone.getModel()).collect(Collectors.toList());
     }
 
     private void initComponents() {
@@ -119,14 +121,17 @@ public class MainFrame extends Frame {
                 boolean[] tryLayOut = new boolean[max];
                 int[] arrSPovtor = new int[max];
                 int[] PermsNotP = new int[max];
-//                Fish fish = new Fish(bonesAllPlayers.stream().map(bone ->  bone.getModel()).collect(Collectors.toList()), playersBones, MAX_BONES_COUNT, tryLayOut, arrSPovtor, PermsNotP);
-//                if (fish.generatePermutation(bonesAllPlayers))
-//                    searchButtonListener(evt, fish);
-//                else
-//                    JOptionPane.showMessageDialog(frame, "Рыбы нет", "Ответ", JOptionPane.QUESTION_MESSAGE);
+//                Fish fish = new Fish(bonesAllPlayers.stream().map(bone ->  bone.getModel()).collect(Collectors.toList()),
+//                        Arrays.stream(playersBones).map(bone ->  bone.getModel()).collect(Collectors.toList()) , MAX_BONES_COUNT, tryLayOut, arrSPovtor, PermsNotP);
+                Fish fish = new Fish(toModels(bonesAllPlayers), Arrays.stream(playersBones).map(this::toModels).toArray(List[]::new),
+                        MAX_BONES_COUNT, tryLayOut, arrSPovtor, PermsNotP);
+
+                if (fish.generatePermutation(bonesAllPlayers))
+                    searchButtonListener(evt, fish);
+                else
+                    JOptionPane.showMessageDialog(frame, "Рыбы нет", "Ответ", JOptionPane.QUESTION_MESSAGE);
             }
         });
-//        Fish fish = new Fish(bonesAllPlayers.stream().map(bone ->  bone.getModel()).collect(Collectors.toList()), playersBones, M
 
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);

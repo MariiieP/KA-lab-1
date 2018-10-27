@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static domino.Perms.fact;
+//import static domino.Perms.fact;
 
 public class Fish {
 
@@ -29,19 +29,27 @@ public class Fish {
 
     public boolean generatePermutation(List bonesAllPlayers) {
         int max = bonesAllPlayers.size();
-//        Integer[] perm = null; //getfirstperm
-//        Integer[] permWithRep = null; //
-//        do {
-//            if (test())
-//                return true;
-//        } while (getnextwithrep || getnextperm)
-        Perms perms = new Perms(max);
-        for (int i = 0; i < fact(max); i++) {
+        Perms perm = new Perms(max);
+//        Integer[] perm = new Integer[max]; //getfirstperm
+//        perm.getFirstPerm(max);
+
+        int[] arr1 = new int[max];
+        for (int i=0;i<max; i++)
+            arr1[i]=i;
+        Integer[] permWithRep = null; //
+        do {
             first = true;
-            PermsP = perms.ArrPerms[i];
-            if (testFish(PermsP, tryLayOut, arrSPovtor))
+            if (testFish( perm.getFirstPerm(max),tryLayOut,arrSPovtor))
                 return true;
-        }
+        } while (nextPermWithRepetition(arrSPovtor,max) || perm.getNextPerm(arr1));
+
+//        Perms perms = new Perms(max);
+//        for (int i = 0; i < fact(max); i++) {
+//            first = true;
+//            PermsP = perms.ArrPerms[i];
+//            if (testFish(PermsP, tryLayOut, arrSPovtor))
+//                return true;
+//        }
         return false;
     }
 
@@ -99,7 +107,7 @@ public class Fish {
     private boolean testFish(int[] arr, boolean[] tryLayOut, int[] arrSPovtor) {
         int size = arr.length;
         Arrays.fill(arrSPovtor, 0);
-        while (nextPermWithRepetition(arrSPovtor, 3)) {
+//        while (nextPermWithRepetition(arrSPovtor, 3)) {
             int first = bonesAllPlayers.get(arr[0]).getLeftPoint();
             int last = bonesAllPlayers.get(arr[0]).getLeftPoint();
             Arrays.fill(tryLayOut, false);
@@ -198,7 +206,7 @@ public class Fish {
             }
             if (tryLayOut[arr.length - 1] == true)
                 return false;
-        }
+//        }
         return true;
     }
 
