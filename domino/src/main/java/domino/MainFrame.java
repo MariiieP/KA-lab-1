@@ -1,12 +1,32 @@
 package domino;
 
-import javax.swing.*;//class
-//import java.awt.
+import javax.swing.JTextArea;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JOptionPane;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle;
+import javax.swing.JFrame;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Color;
+import java.awt.Button;
+import java.awt.Cursor;
+import java.awt.EventQueue;
+import java.awt.Toolkit;
+import java.awt.Dimension;
+import java.awt.TextField;
+
 import java.util.ArrayList;
-import java.lang.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainFrame extends Frame {
@@ -15,9 +35,10 @@ public class MainFrame extends Frame {
     private final static int PLAYERS_COUNT = 2;
     private int MAX_BONES_COUNT = 7;
     private final static int MAX_BONE_VALUE = 6;
-    private ArrayList<Bone>[] playersBones = new ArrayList[PLAYERS_COUNT];
-    private ArrayList<Bone> bonesAllPlayers = new ArrayList<Bone>();
-    private ArrayList<Bone> bonesOnTheDesk;
+    private List<Bone>[] playersBones = new List[PLAYERS_COUNT];
+//    private ArrayList<Bone> bonesAllPlayers = new ArrayList<Bone>();
+    private List<Bone> bonesAllPlayers = new ArrayList<Bone>();
+    private List<Bone> bonesOnTheDesk;
     private int[] placeJ = new int[2];
     private int[] placeK = new int[2];
 
@@ -28,22 +49,19 @@ public class MainFrame extends Frame {
 
 
     public MainFrame() {
-        JPanel panel = new JPanel();
-        initComponents(panel);
-//        graphics = this.getGraphics();
-        graphics=panel.getGraphics();
+        initComponents();
+        graphics = this.getGraphics();
         backgroundColor = getBackground();
-        
     }
 
-    private void initComponents(JPanel panel) {
+    private void initComponents() {
 
         Button buttonStart = new Button();
-        panel.add(buttonStart);
+        add(buttonStart);
         Button buttonStop = new Button();
-        panel.add(buttonStop);
-        JTextField field1 = new JTextField("7");
-        panel.add(field1);
+        add(buttonStop);
+        TextField field1 = new TextField("7");
+        add(field1);
 
         ActionListener newListener = new ActionListener() {
             @Override
@@ -52,8 +70,8 @@ public class MainFrame extends Frame {
             }
         };
 
-        panel.setBackground(new Color(18, 180, 180));
-        panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        setBackground(new Color(18, 180, 180));
+        setCursor(new Cursor(Cursor.HAND_CURSOR));
         setLocationRelativeTo(null);
         setResizable(false);
         selected = false;
@@ -101,13 +119,14 @@ public class MainFrame extends Frame {
                 boolean[] tryLayOut = new boolean[max];
                 int[] arrSPovtor = new int[max];
                 int[] PermsNotP = new int[max];
-                Fish fish = new Fish(bonesAllPlayers.stream().map(bone ->  bone.getModel()).collect(Collectors.toList()), playersBones, MAX_BONES_COUNT, tryLayOut, arrSPovtor, PermsNotP);
-                if (fish.generatePermutation(bonesAllPlayers))
-                    searchButtonListener(evt, fish);
-                else
-                    JOptionPane.showMessageDialog(frame, "Рыбы нет", "Ответ", JOptionPane.QUESTION_MESSAGE);
+//                Fish fish = new Fish(bonesAllPlayers.stream().map(bone ->  bone.getModel()).collect(Collectors.toList()), playersBones, MAX_BONES_COUNT, tryLayOut, arrSPovtor, PermsNotP);
+//                if (fish.generatePermutation(bonesAllPlayers))
+//                    searchButtonListener(evt, fish);
+//                else
+//                    JOptionPane.showMessageDialog(frame, "Рыбы нет", "Ответ", JOptionPane.QUESTION_MESSAGE);
             }
         });
+//        Fish fish = new Fish(bonesAllPlayers.stream().map(bone ->  bone.getModel()).collect(Collectors.toList()), playersBones, M
 
         GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
@@ -118,14 +137,12 @@ public class MainFrame extends Frame {
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonStop, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addComponent(field1, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(panel,GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(1400, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(buttonStop, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
                         .addComponent(buttonStart, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(panel,GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
                         .addComponent(field1, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(1400, Short.MAX_VALUE))
         );
@@ -141,7 +158,11 @@ public class MainFrame extends Frame {
     private void formComponentShown(ComponentEvent evt) {
     }
 
-
+    public void addBoneList(ArrayList bone,List boneBone){
+        for (int i=0;i<bone.size()-1;i++)
+            bone.add(boneBone);
+//        return;
+    }
 
     private void exitForm(WindowEvent evt) {
         System.exit(0);
@@ -149,7 +170,7 @@ public class MainFrame extends Frame {
 
     // инициализация костей и раздача их игрокам
     private void initBones() {
-        ArrayList<Bone> bonesPool = new ArrayList<Bone>();
+        List<Bone> bonesPool = new ArrayList<Bone>();
         bonesPool.clear();
         //инициализируем все кости 0..27 (28)
         for (byte p = 0; p <= MAX_BONE_VALUE; p++) {
@@ -200,7 +221,7 @@ public class MainFrame extends Frame {
                         break;
                     case 1:
                         x = this.getWidth() / 2 - Bone.width * MAX_BONES_COUNT + 10;
-                        y = 50 + Bone.width;
+                        y = 60 + Bone.width;
                         dx = (Bone.height + 10);
                         dy = 0;
                         bone.rotate((byte) 1, (byte) 0, graphics, backgroundColor);
@@ -256,6 +277,7 @@ public class MainFrame extends Frame {
             }
         }
     }
+
 
 
     private MainFrame frame;

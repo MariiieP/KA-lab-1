@@ -12,13 +12,13 @@ public class Fish {
     static boolean first = true;
     private int MAX_BONES_COUNT;
     private List<Bone.BoneModel> bonesAllPlayers;
-    private ArrayList<Bone.BoneModel>[] playersBones;
+    private List<Bone.BoneModel>[] playersBones;
     boolean[] tryLayOut;
     int[] arrSPovtor;
     int[] PermsP;
 
 
-    public Fish(List<Bone.BoneModel> bonesAll, ArrayList<Bone.BoneModel>[] pBones, int N, boolean[] trueF, int[] arrP, int[] PermNotPov) {
+    public Fish(List<Bone.BoneModel> bonesAll, List<Bone.BoneModel>[] pBones, int N, boolean[] trueF, int[] arrP, int[] PermNotPov) {
         bonesAllPlayers =  bonesAll;
         playersBones = pBones;
         MAX_BONES_COUNT = N;
@@ -27,7 +27,7 @@ public class Fish {
         PermsP = PermNotPov;
     }
 
-    public boolean generatePermutation(ArrayList bonesAllPlayers) {
+    public boolean generatePermutation(List bonesAllPlayers) {
         int max = bonesAllPlayers.size();
 //        Integer[] perm = null; //getfirstperm
 //        Integer[] permWithRep = null; //

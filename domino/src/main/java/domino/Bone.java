@@ -140,7 +140,7 @@ public class Bone  {
     void hide(Graphics G, Color back) {
         G.setColor(back);
         int sx = getSizeX(), sy = getSizeY();
-        G.fillRect(X - sx / 2, Y - sy / 2, sx+2, sy+2);
+        G.fillRect(X - sx / 2-2, Y - sy / 2-2, sx+4, sy+4);
     }
     /**
      * Перемещение кости на доске
