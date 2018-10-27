@@ -2,7 +2,7 @@
 package domino;
         import java.awt.*;
     //  класс, который задает кость как графически, так и логически*/
-public class Bone {
+public class Bone  {
 
     static final byte width = 40;
     static final byte height = width * 2;
@@ -10,7 +10,7 @@ public class Bone {
     static final Color colorMarked = Color.RED;
     static final Color colorBack = Color.WHITE;
     static final Color colorPoint = Color.BLUE;
-    private byte points1, points2;
+    private BoneModel bone;
     private int X, Y;
     private byte dirX, dirY;
     static byte[][][] pointCoords = {
@@ -26,10 +26,26 @@ public class Bone {
 
     private boolean isMarked;
 
+    public class BoneModel {
+        private byte leftPoint;
+        private byte rightPoint;
+
+        private BoneModel(byte leftPoint, byte rightPoint) {
+            this.leftPoint = leftPoint;
+            this.rightPoint = rightPoint;
+        }
+
+        public byte getLeftPoint() {
+            return leftPoint;
+        }
+
+        public  byte getRightPoint() {
+            return rightPoint;
+        }
+    }
+
     Bone(byte p1, byte p2) {
-        points1 = p1;
-        points2 = p2;
-        isMarked = false;
+        this.bone = new BoneModel(p1, p2);
     }
 
     int getX() {
@@ -37,6 +53,10 @@ public class Bone {
     }
     int getY() {
         return Y;
+    }
+
+    public BoneModel getModel() {
+        return bone;
     }
     /**
      * Получение размер по X
@@ -71,10 +91,10 @@ public class Bone {
      */
     public byte points(int side) {
         if (side == 0) {
-            return points1;
+            return bone.leftPoint;
         }
         if (side == 1) {
-            return points2;
+            return bone.rightPoint;
         }
         return -1;
     }
@@ -102,8 +122,8 @@ public class Bone {
         }
         int x1 = X - dirX * sx / 4, y1 = Y - dirY * sy / 4;
         for (int s = 1; s <= 2; s++) {
-            int p = points1;
-            if (s == 2) p = points2;
+            int p = bone.leftPoint;
+            if (s == 2) p = bone.rightPoint;
             for (int i = 0; i < p; i++) {
                 int dx = pointCoords[p][i][0] * width / 4;
                 int dy = pointCoords[p][i][1] * width / 4;
@@ -120,7 +140,7 @@ public class Bone {
     void hide(Graphics G, Color back) {
         G.setColor(back);
         int sx = getSizeX(), sy = getSizeY();
-        G.fillRect(X - sx / 2-2, Y - sy / 2-2, sx+2, sy+2);
+        G.fillRect(X - sx / 2, Y - sy / 2, sx+2, sy+2);
     }
     /**
      * Перемещение кости на доске

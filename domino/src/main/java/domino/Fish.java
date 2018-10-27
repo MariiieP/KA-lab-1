@@ -3,6 +3,7 @@ package domino;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static domino.Perms.fact;
 
@@ -10,15 +11,15 @@ public class Fish {
 
     static boolean first = true;
     private int MAX_BONES_COUNT;
-    private ArrayList<Bone> bonesAllPlayers;
-    private ArrayList<Bone>[] playersBones;
+    private List<Bone.BoneModel> bonesAllPlayers;
+    private ArrayList<Bone.BoneModel>[] playersBones;
     boolean[] tryLayOut;
     int[] arrSPovtor;
     int[] PermsP;
 
 
-    public Fish(ArrayList<Bone> bonesAll, ArrayList<Bone>[] pBones, int N, boolean[] trueF, int[] arrP, int[] PermNotPov) {
-        bonesAllPlayers = bonesAll;
+    public Fish(List<Bone.BoneModel> bonesAll, ArrayList<Bone.BoneModel>[] pBones, int N, boolean[] trueF, int[] arrP, int[] PermNotPov) {
+        bonesAllPlayers =  bonesAll;
         playersBones = pBones;
         MAX_BONES_COUNT = N;
         tryLayOut = trueF;
@@ -28,6 +29,12 @@ public class Fish {
 
     public boolean generatePermutation(ArrayList bonesAllPlayers) {
         int max = bonesAllPlayers.size();
+//        Integer[] perm = null; //getfirstperm
+//        Integer[] permWithRep = null; //
+//        do {
+//            if (test())
+//                return true;
+//        } while (getnextwithrep || getnextperm)
         Perms perms = new Perms(max);
         for (int i = 0; i < fact(max); i++) {
             first = true;
@@ -58,8 +65,8 @@ public class Fish {
     }
 
     private boolean Help(int first, int last, int index) {
-        return (first == bonesAllPlayers.get(index).points(0) || first == bonesAllPlayers.get(index).points(1) ||
-                last == bonesAllPlayers.get(index).points(0) || last == bonesAllPlayers.get(index).points(1));
+        return (first == bonesAllPlayers.get(index).getLeftPoint() || first == bonesAllPlayers.get(index).getRightPoint() ||
+                last == bonesAllPlayers.get(index).getLeftPoint() || last == bonesAllPlayers.get(index).getRightPoint());
     }
 
     private boolean tryJoin(int first, int last, int index, int[] arr, boolean[] tryLayOut) {
@@ -93,8 +100,8 @@ public class Fish {
         int size = arr.length;
         Arrays.fill(arrSPovtor, 0);
         while (nextPermWithRepetition(arrSPovtor, 3)) {
-            int first = bonesAllPlayers.get(arr[0]).points(1);
-            int last = bonesAllPlayers.get(arr[0]).points(0);
+            int first = bonesAllPlayers.get(arr[0]).getLeftPoint();
+            int last = bonesAllPlayers.get(arr[0]).getLeftPoint();
             Arrays.fill(tryLayOut, false);
             tryLayOut[arr[0]] = true;
             int countUseBonePlayers1 = 0;
@@ -111,8 +118,8 @@ public class Fish {
                     switch (arrSPovtor[i]) {
 
                         case 0:
-                            if (first == bonesAllPlayers.get(arr[i + 1]).points(0)) {
-                                first = bonesAllPlayers.get(arr[i + 1]).points(1);
+                            if (first == bonesAllPlayers.get(arr[i + 1]).getLeftPoint()) {
+                                first = bonesAllPlayers.get(arr[i + 1]).getLeftPoint();
                                 tryLayOut[arr[i + 1]] = true;
 
                                 if (isWhose(arr[i + 1]) == true)
@@ -131,8 +138,8 @@ public class Fish {
                                 return !(countUseBonePlayers1 == MAX_BONES_COUNT || countUseBonePlayers2 == MAX_BONES_COUNT);
                             break;
                         case 1:
-                            if (first == bonesAllPlayers.get(arr[i + 1]).points(1)) {
-                                first = bonesAllPlayers.get(arr[i + 1]).points(0);
+                            if (first == bonesAllPlayers.get(arr[i + 1]).getLeftPoint()) {
+                                first = bonesAllPlayers.get(arr[i + 1]).getLeftPoint();
                                 tryLayOut[arr[i + 1]] = true;
 
                                 if (isWhose(arr[i + 1]) == true)
@@ -150,8 +157,8 @@ public class Fish {
                                 return !(countUseBonePlayers1 == MAX_BONES_COUNT || countUseBonePlayers2 == MAX_BONES_COUNT);
                             break;
                         case 2:
-                            if (last == bonesAllPlayers.get(arr[i + 1]).points(0)) {
-                                last = bonesAllPlayers.get(arr[i + 1]).points(1);
+                            if (last == bonesAllPlayers.get(arr[i + 1]).getLeftPoint()) {
+                                last = bonesAllPlayers.get(arr[i + 1]).getLeftPoint();
                                 tryLayOut[arr[i + 1]] = true;
 
                                 if (isWhose(arr[i + 1]) == true)
@@ -169,8 +176,8 @@ public class Fish {
                                 return !(countUseBonePlayers1 == MAX_BONES_COUNT || countUseBonePlayers2 == MAX_BONES_COUNT);
                             break;
                         case 3:
-                            if (last == bonesAllPlayers.get(arr[i + 1]).points(1)) {
-                                last = bonesAllPlayers.get(arr[i + 1]).points(0);
+                            if (last == bonesAllPlayers.get(arr[i + 1]).getLeftPoint()) {
+                                last = bonesAllPlayers.get(arr[i + 1]).getLeftPoint();
                                 tryLayOut[arr[i + 1]] = true;
 
                                 if (isWhose(arr[i + 1]) == true)

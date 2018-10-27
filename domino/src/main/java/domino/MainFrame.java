@@ -1,12 +1,13 @@
-
 package domino;
 
+import javax.swing.*;//class
+//import java.awt.
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.lang.*;
+import java.util.stream.Collectors;
 
 public class MainFrame extends Frame {
     private Graphics graphics;
@@ -24,20 +25,25 @@ public class MainFrame extends Frame {
     private int countFish = 0;
     private JTextArea textArea;
 
-    public MainFrame() {
-        initComponents();
-        graphics = this.getGraphics();
-        backgroundColor = getBackground();
 
+
+    public MainFrame() {
+        JPanel panel = new JPanel();
+        initComponents(panel);
+//        graphics = this.getGraphics();
+        graphics=panel.getGraphics();
+        backgroundColor = getBackground();
+        
     }
 
-    private void initComponents() {
+    private void initComponents(JPanel panel) {
+
         Button buttonStart = new Button();
-        add(buttonStart);
+        panel.add(buttonStart);
         Button buttonStop = new Button();
-        add(buttonStop);
+        panel.add(buttonStop);
         JTextField field1 = new JTextField("7");
-        add(field1);
+        panel.add(field1);
 
         ActionListener newListener = new ActionListener() {
             @Override
@@ -46,8 +52,8 @@ public class MainFrame extends Frame {
             }
         };
 
-        setBackground(new Color(18, 180, 180));
-        setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.setBackground(new Color(18, 180, 180));
+        panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         setLocationRelativeTo(null);
         setResizable(false);
         selected = false;
@@ -76,9 +82,8 @@ public class MainFrame extends Frame {
         buttonStart.setLabel("Начать");
         buttonStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                String str = field1.getText();
-                str.trim();
-                str.replaceAll("^\\s+|\\s+$", "");
+                String str = field1.getText()
+                    .replaceAll(" ", "");
                 int res = Integer.parseInt(str);
                 if (res > 0 && res < 15) {
                     MAX_BONES_COUNT = res;
@@ -96,7 +101,7 @@ public class MainFrame extends Frame {
                 boolean[] tryLayOut = new boolean[max];
                 int[] arrSPovtor = new int[max];
                 int[] PermsNotP = new int[max];
-                Fish fish = new Fish(bonesAllPlayers, playersBones, MAX_BONES_COUNT, tryLayOut, arrSPovtor, PermsNotP);
+                Fish fish = new Fish(bonesAllPlayers.stream().map(bone ->  bone.getModel()).collect(Collectors.toList()), playersBones, MAX_BONES_COUNT, tryLayOut, arrSPovtor, PermsNotP);
                 if (fish.generatePermutation(bonesAllPlayers))
                     searchButtonListener(evt, fish);
                 else
@@ -113,12 +118,14 @@ public class MainFrame extends Frame {
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonStop, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addComponent(field1, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panel,GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(1400, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(buttonStop, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
                         .addComponent(buttonStart, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(panel,GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
                         .addComponent(field1, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(1400, Short.MAX_VALUE))
         );
@@ -133,6 +140,7 @@ public class MainFrame extends Frame {
 
     private void formComponentShown(ComponentEvent evt) {
     }
+
 
 
     private void exitForm(WindowEvent evt) {
@@ -249,6 +257,7 @@ public class MainFrame extends Frame {
         }
     }
 
+
     private MainFrame frame;
 
     public static void main(String args[]) {
@@ -263,6 +272,8 @@ public class MainFrame extends Frame {
             }
         });
     }
+
+
 }
 
 
