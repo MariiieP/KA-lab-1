@@ -24,7 +24,6 @@ public class Bone  {
             }
     };
 
-    private boolean isMarked;
 
     public class BoneModel {
         private byte leftPoint;
@@ -68,14 +67,7 @@ public class Bone  {
             return width;
         }
     }
-    Bone setColorMarked() {
-        isMarked = true;
-        return this;
-    }
-    Bone setColorUsual() {
-        isMarked = false;
-        return this;
-    }
+
     /**
      * Получение размер по Y
      */

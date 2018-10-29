@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.lang.System.arraycopy;
+
 //import static domino.Perms.fact;
 
 public class Fish {
@@ -29,27 +31,75 @@ public class Fish {
 
     public boolean generatePermutation(List bonesAllPlayers) {
         int max = bonesAllPlayers.size();
-        Perms perm = new Perms(max);
-//        Integer[] perm = new Integer[max]; //getfirstperm
-//        perm.getFirstPerm(max);
-
         int[] arr1 = new int[max];
         for (int i=0;i<max; i++)
             arr1[i]=i;
-        Integer[] permWithRep = null; //
-        do {
-            first = true;
-            if (testFish( perm.getFirstPerm(max),tryLayOut,arrSPovtor))
-                return true;
-        } while (nextPermWithRepetition(arrSPovtor,max) || perm.getNextPerm(arr1));
+        Perms perm = new Perms(max,arr1);
 
-//        Perms perms = new Perms(max);
-//        for (int i = 0; i < fact(max); i++) {
-//            first = true;
-//            PermsP = perms.ArrPerms[i];
-//            if (testFish(PermsP, tryLayOut, arrSPovtor))
+        int[] indexI = new int[1];indexI[0]=0;
+        int[] indexINotRepeat = new int[1];indexINotRepeat[0]=0;
+        boolean[] check = new boolean[1];check[0]=true;
+
+
+        int[] notPerm = {3,0,1,5,2,4}; int[] withPerm = {3,3,2,0,0,0};
+
+        if (testFish(notPerm, tryLayOut, withPerm, check)) {
+                arraycopy(withPerm, 0,arrSPovtor,0,max);
+                arraycopy(notPerm, 0,PermsP,0,max);
+                return true;
+            }
+
+
+//        if( first) {
+//            if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)) {
+//                arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
+//                arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
 //                return true;
+//            }
+//            check[0]=true;
+//            while (perm.nextPermWithRepetition(perm.getWithRepeatPerm, 3, indexI) && check[0]) {
+//                if (check[0])
+////            if (  perm.nextPermWithRepetition(permsMax,3,indexI){
+//                    if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)){
+//                        arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
+//                        arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
+//                        return true;
+//                    }
+////                check[0] = true;
+//            }
+//            check[0] = true;
+//            Arrays.fill(perm.getWithRepeatPerm, 0);
+////            first = true;
 //        }
+//
+//        while (perm.getNextPerm(indexINotRepeat)) {
+//
+//            if( first)
+//                if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)) {
+//                    arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
+//                    arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
+////                    first=false;
+//                    return true;
+//                }
+//            first=false;
+//
+//
+//            while(perm.nextPermWithRepetition(perm.getWithRepeatPerm,3,indexI) && check[0]){
+//                if (check[0])
+////            if (  perm.nextPermWithRepetition(permsMax,3,indexI){
+//                    if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)){
+//                        arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
+//                        arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
+//                        return true;
+//                    }
+//
+//            }
+//            check[0]=true; Arrays.fill(perm.getWithRepeatPerm,0);first=true;
+//        }
+
+
+
+
         return false;
     }
 
@@ -104,11 +154,11 @@ public class Fish {
     }
 
 
-    private boolean testFish(int[] arr, boolean[] tryLayOut, int[] arrSPovtor) {
+    private boolean testFish(int[] arr, boolean[] tryLayOut, int[] arrSPovtor,boolean[] check) {
         int size = arr.length;
-        Arrays.fill(arrSPovtor, 0);
+//        Arrays.fill(arrSPovtor, 0);
 //        while (nextPermWithRepetition(arrSPovtor, 3)) {
-            int first = bonesAllPlayers.get(arr[0]).getLeftPoint();
+            int first = bonesAllPlayers.get(arr[0]).getRightPoint();
             int last = bonesAllPlayers.get(arr[0]).getLeftPoint();
             Arrays.fill(tryLayOut, false);
             tryLayOut[arr[0]] = true;
@@ -120,14 +170,17 @@ public class Fish {
                 countUseBonePlayers2++;
 
             for (int i = 0; i < arr.length - 1; i++) {
-                if (!tryPerms(first, last, arr[i], arr[i + 1], arr, tryLayOut))
+                if (!tryPerms(first, last, arr[i], arr[i + 1], arr, tryLayOut)) {
+                    check[0]=false;
                     return false;
+
+                }
                 else
                     switch (arrSPovtor[i]) {
 
                         case 0:
                             if (first == bonesAllPlayers.get(arr[i + 1]).getLeftPoint()) {
-                                first = bonesAllPlayers.get(arr[i + 1]).getLeftPoint();
+                                first = bonesAllPlayers.get(arr[i + 1]).getRightPoint();
                                 tryLayOut[arr[i + 1]] = true;
 
                                 if (isWhose(arr[i + 1]) == true)
@@ -138,15 +191,19 @@ public class Fish {
                                 break;
                             }
                             if (tryJoin(first, last, i + 1, arr, tryLayOut))
-                                if (tryJoinNeighbor(first, last, arr[i + 1], tryLayOut))
+                                if (tryJoinNeighbor(first, last, arr[i + 1], tryLayOut)) {
                                     i = arr.length;
-                                else
                                     return false;
+                                }
+                                else{
+                                    check[0]=false;
+                                    return false;
+                                }
                             else
                                 return !(countUseBonePlayers1 == MAX_BONES_COUNT || countUseBonePlayers2 == MAX_BONES_COUNT);
-                            break;
+//                            break;
                         case 1:
-                            if (first == bonesAllPlayers.get(arr[i + 1]).getLeftPoint()) {
+                            if (first == bonesAllPlayers.get(arr[i + 1]).getRightPoint()) {
                                 first = bonesAllPlayers.get(arr[i + 1]).getLeftPoint();
                                 tryLayOut[arr[i + 1]] = true;
 
@@ -157,16 +214,20 @@ public class Fish {
                                 break;
                             }
                             if (tryJoin(first, last, i + 1, arr, tryLayOut))
-                                if (tryJoinNeighbor(first, last, arr[i + 1], tryLayOut))
+                                if (tryJoinNeighbor(first, last, arr[i + 1], tryLayOut)) {
                                     i = arr.length;
-                                else
                                     return false;
+                                }
+                                else{
+                                    check[0]=false;
+                                    return false;
+                                }
                             else
                                 return !(countUseBonePlayers1 == MAX_BONES_COUNT || countUseBonePlayers2 == MAX_BONES_COUNT);
-                            break;
+//                            break;
                         case 2:
-                            if (last == bonesAllPlayers.get(arr[i + 1]).getLeftPoint()) {
-                                last = bonesAllPlayers.get(arr[i + 1]).getLeftPoint();
+                            if (last == bonesAllPlayers.get(arr[i + 1]).getLeftPoint ()) {
+                                last = bonesAllPlayers.get(arr[i + 1]).getRightPoint();
                                 tryLayOut[arr[i + 1]] = true;
 
                                 if (isWhose(arr[i + 1]) == true)
@@ -176,15 +237,19 @@ public class Fish {
                                 break;
                             }
                             if (tryJoin(first, last, i + 1, arr, tryLayOut))
-                                if (tryJoinNeighbor(first, last, arr[i + 1], tryLayOut))
+                                if (tryJoinNeighbor(first, last, arr[i + 1], tryLayOut)){
                                     i = arr.length;
-                                else
                                     return false;
+                                }
+                                else{
+                                    check[0]=false;
+                                    return false;
+                                }
                             else
                                 return !(countUseBonePlayers1 == MAX_BONES_COUNT || countUseBonePlayers2 == MAX_BONES_COUNT);
-                            break;
+//                            break;
                         case 3:
-                            if (last == bonesAllPlayers.get(arr[i + 1]).getLeftPoint()) {
+                            if (last == bonesAllPlayers.get(arr[i + 1]).getRightPoint()) {
                                 last = bonesAllPlayers.get(arr[i + 1]).getLeftPoint();
                                 tryLayOut[arr[i + 1]] = true;
 
@@ -195,13 +260,17 @@ public class Fish {
                                 break;
                             }
                             if (tryJoin(first, last, i + 1, arr, tryLayOut))
-                                if (tryJoinNeighbor(first, last, arr[i + 1], tryLayOut))
+                                if (tryJoinNeighbor(first, last, arr[i + 1], tryLayOut)) {
                                     i = arr.length;
-                                else
                                     return false;
+                                }
+                                else{
+                                    check[0]=false;
+                                    return false;
+                                }
                             else
                                 return !(countUseBonePlayers1 == MAX_BONES_COUNT || countUseBonePlayers2 == MAX_BONES_COUNT);
-                            break;
+//                            break;
                     }
             }
             if (tryLayOut[arr.length - 1] == true)
