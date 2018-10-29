@@ -41,65 +41,68 @@ public class Fish {
         boolean[] check = new boolean[1];check[0]=true;
 
 
-        int[] notPerm = {3,0,1,5,2,4}; int[] withPerm = {3,3,2,0,0,0};
-
-        if (testFish(notPerm, tryLayOut, withPerm, check)) {
-                arraycopy(withPerm, 0,arrSPovtor,0,max);
-                arraycopy(notPerm, 0,PermsP,0,max);
-                return true;
-            }
-
-
-//        if( first) {
-//            if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)) {
-//                arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
-//                arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
+//        int[] notPerm = {0,4,1,2,3,5}; int[] withPerm = {0,0,0,0,0,0};
+//
+//        if (testFish(notPerm, tryLayOut, withPerm, check)) {
+//                arraycopy(withPerm, 0,arrSPovtor,0,max);
+//                arraycopy(notPerm, 0,PermsP,0,max);
 //                return true;
 //            }
-//            check[0]=true;
-//            while (perm.nextPermWithRepetition(perm.getWithRepeatPerm, 3, indexI) && check[0]) {
-//                if (check[0])
-////            if (  perm.nextPermWithRepetition(permsMax,3,indexI){
-//                    if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)){
-//                        arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
-//                        arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
-//                        return true;
-//                    }
-////                check[0] = true;
-//            }
-//            check[0] = true;
-//            Arrays.fill(perm.getWithRepeatPerm, 0);
-////            first = true;
-//        }
-//
-//        while (perm.getNextPerm(indexINotRepeat)) {
-//
-//            if( first)
-//                if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)) {
-//                    arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
-//                    arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
-////                    first=false;
-//                    return true;
-//                }
-//            first=false;
-//
-//
-//            while(perm.nextPermWithRepetition(perm.getWithRepeatPerm,3,indexI) && check[0]){
-//                if (check[0])
-////            if (  perm.nextPermWithRepetition(permsMax,3,indexI){
-//                    if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)){
-//                        arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
-//                        arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
-//                        return true;
-//                    }
-//
-//            }
-//            check[0]=true; Arrays.fill(perm.getWithRepeatPerm,0);first=true;
-//        }
+
+    int countUse=0;
+        if( first) {
+            countUse++;
+            if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)) {
+                arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
+                arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
+                return true;
+            }
+            check[0]=true;
+            while (perm.nextPermWithRepetition(perm.getWithRepeatPerm, 3, indexI) && check[0]) {
+                countUse++;
+                if (check[0]) {
+                    if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)) {
+                        arraycopy(perm.getWithRepeatPerm, 0, arrSPovtor, 0, max);
+                        arraycopy(perm.getNotRepeatPerm, 0, PermsP, 0, max);
+                        return true;
+                    }
+                }
+            }
+            check[0] = true;
+            Arrays.fill(perm.getWithRepeatPerm, 0);
+        }
+
+        while (perm.getNextPerm(indexINotRepeat)) {
+
+            if( first){
+                countUse++;
+            if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)) {
+                    arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
+                    arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
+                    return true;
+                }
+            }
+            first=false;
+
+
+            while(perm.nextPermWithRepetition(perm.getWithRepeatPerm,3,indexI) && check[0]){
+                countUse++;
+
+                if (check[0])
+                if (testFish(perm.getNotRepeatPerm, tryLayOut, perm.getWithRepeatPerm, check)){
+
+                        arraycopy(perm.getWithRepeatPerm, 0,arrSPovtor,0,max);
+                        arraycopy(perm.getNotRepeatPerm, 0,PermsP,0,max);
+                        return true;
+                    }
+
+            }
+            check[0]=true; Arrays.fill(perm.getWithRepeatPerm,0);first=true;
+        }
 
 
 
-
+    countUse = countUse;
         return false;
     }
 
@@ -141,12 +144,12 @@ public class Fish {
     private boolean tryPerms(int first, int last, int index1, int index2, int[] arr, boolean[] tryLayOut) {
         if ((isWhose(index1) && isWhose(index2)) == true) {
             for (int i = MAX_BONES_COUNT; i < bonesAllPlayers.size(); i++) {
-                if (tryLayOut[arr[i]] == false && Help(first, last, i))
+                if (tryLayOut[i] == false && Help(first, last, i))
                     return false;
             }
         } else if ((isWhose(index1) == false) && (isWhose(index2) == false)) {
             for (int i = 0; i < MAX_BONES_COUNT; i++) {
-                if (tryLayOut[arr[i]] == false && Help(first, last, i))
+                if (tryLayOut[i] == false && Help(first, last, i))
                     return false;
             }
         }
