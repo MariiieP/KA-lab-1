@@ -121,8 +121,6 @@ public class MainFrame extends Frame {
                 boolean[] tryLayOut = new boolean[max];
                 int[] arrSPovtor = new int[max];
                 int[] PermsNotP = new int[max];
-//                Fish fish = new Fish(bonesAllPlayers.stream().map(bone ->  bone.getModel()).collect(Collectors.toList()),
-//                        Arrays.stream(playersBones).map(bone ->  bone.getModel()).collect(Collectors.toList()) , MAX_BONES_COUNT, tryLayOut, arrSPovtor, PermsNotP);
                 Fish fish = new Fish(toModels(bonesAllPlayers), Arrays.stream(playersBones).map(MainFrame.this::toModels).toArray(List[]::new),
                         MAX_BONES_COUNT, tryLayOut, arrSPovtor, PermsNotP);
 
@@ -182,20 +180,14 @@ public class MainFrame extends Frame {
         }
         //заполнение массивов игроков
         bonesOnTheDesk = new ArrayList<Bone>();
-//        for (int i = 0; i < MAX_BONES_COUNT; i++) {
-//            for (int p = 0; p < PLAYERS_COUNT; p++) {
-//                int k = (int) (Math.random() * bonesPool.size());
-//                playersBones[p].add(bonesPool.get(k));
-//                bonesPool.remove(k);
-//            }
-//        }
+        for (int i = 0; i < MAX_BONES_COUNT; i++) {
+            for (int p = 0; p < PLAYERS_COUNT; p++) {
+                int k = (int) (Math.random() * bonesPool.size());
+                playersBones[p].add(bonesPool.get(k));
+                bonesPool.remove(k);
+            }
+        }
 
-        playersBones[0].add(bonesPool.get(4));
-        playersBones[0].add(bonesPool.get(12));
-        playersBones[0].add(bonesPool.get(24));
-        playersBones[1].add(bonesPool.get(1));
-        playersBones[1].add(bonesPool.get(7));
-        playersBones[1].add(bonesPool.get(14));
         bonesAllPlayers.clear();
         //заполнение массива 2n
         for (int p = 0; p < PLAYERS_COUNT; p++) {
@@ -204,7 +196,6 @@ public class MainFrame extends Frame {
             }
         }
     }
-
 
     // то что мы делаем при старте
     private void startButtonListener(ActionEvent evt) {

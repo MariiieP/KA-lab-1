@@ -1,6 +1,8 @@
 
 package domino;
-        import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Graphics;
     //  класс, который задает кость как графически, так и логически*/
 public class Bone  {
 
